@@ -1,46 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const converter = new MetaGlassesConverter();
 
- 
-  const TRACKER_NAMESPACE = "sayanroy0009-rayban-meta";
-
-
-  const StatsTracker = {
-    async hit(key) {
-      try {
-        const res = await fetch(`https://api.counterapi.com/v1/sayanroy0009-meta/${key}/up`);
-        if (res.ok) {
-          const data = await res.json();
-          return data.count;
-        }
-      } catch (e) {
-        console.warn('Remote counter hit failed, falling back:', e);
-      }
-
-      // Local fallback
-      const localKey = `sayan_meta_${key}`;
-      const count = parseInt(localStorage.getItem(localKey) || '0', 10) + 1;
-      localStorage.setItem(localKey, count);
-      return count;
-    },
-
-    async get(key) {
-      try {
-        const res = await fetch(`https://api.counterapi.com/v1/sayanroy0009-meta/${key}`);
-        if (res.ok) {
-          const data = await res.json();
-          return data.count;
-        }
-      } catch (e) {
-        console.warn('Remote counter get failed, falling back:', e);
-      }
-
-      // Local fallback
-      const localKey = `sayan_meta_${key}`;
-      return parseInt(localStorage.getItem(localKey) || '0', 10);
-    }
-  };
-  
   // Elements
   const dropZone = document.getElementById('dropZone');
   const fileInput = document.getElementById('fileInput');
@@ -56,24 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const downloadBtn = document.getElementById('downloadBtn');
   const shareBtn = document.getElementById('shareBtn');
   const toast = document.getElementById('statusToast');
-  const visitCountEl = document.getElementById('visitCount');
-  const conversionCountEl = document.getElementById('conversionCount');
 
   let currentSourceDataUrl = null;
   let finalResult = null;
-
-  // Initialize Global Counters
-  (async () => {
-    const visits = await StatsTracker.hit('page_visits');
-    if (visits !== null) {
-      visitCountEl.textContent = visits.toLocaleString();
-    }
-
-    const conversions = await StatsTracker.get('photos_converted');
-    if (conversions !== null) {
-      conversionCountEl.textContent = conversions.toLocaleString();
-    }
-  })();
 
   const showToast = (msg, type = 'success') => {
     toast.textContent = msg;
@@ -165,13 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Automatically initiate download
       triggerDownload(finalResult.dataUrl);
       showToast('Conversion complete. Image download initiated.');
-
-      // Increment conversion count
-      StatsTracker.hit('photos_converted').then((count) => {
-        if (count !== null) {
-          conversionCountEl.textContent = count.toLocaleString();
-        }
-      });
     } catch (err) {
       console.error(err);
       showToast('Conversion failed. Inspect file contents.', 'error');
