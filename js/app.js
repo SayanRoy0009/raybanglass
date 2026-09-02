@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     async hit(key) {
       try {
         // Try incrementing via CounterAPI
-        const res = await fetch(`https://api.counterapi.dev/v1/${TRACKER_NAMESPACE}/${key}/up`);
+        const res = await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}/up`);
         if (!res.ok) {
           // If key doesn't exist yet, create/initialize it
-          const setRes = await fetch(`https://api.counterapi.dev/v1/${TRACKER_NAMESPACE}/${key}/set?count=1`);
+          const setRes = await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}/set?count=1`);
           const setData = await setRes.json();
           return setData.count || 1;
         }
@@ -26,10 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async get(key) {
       try {
-        const res = await fetch(`https://api.counterapi.dev/v1/${TRACKER_NAMESPACE}/${key}`);
+        const res = await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}`);
         if (!res.ok) {
           // Key doesn't exist yet, initialize with 0
-          await fetch(`https://api.counterapi.dev/v1/${TRACKER_NAMESPACE}/${key}/set?count=0`);
+          await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}/set?count=0`);
           return 0;
         }
         const data = await res.json();
