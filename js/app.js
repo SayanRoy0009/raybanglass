@@ -5,39 +5,42 @@ document.addEventListener('DOMContentLoaded', () => {
   const TRACKER_NAMESPACE = "sayanroy0009-rayban-meta";
 
 
-  // Public, zero-token bucket on KVdb.io
-  const BUCKET_ID = "bk_sayan_rayban"; 
-
   const StatsTracker = {
-    // Increments counter globally (+1)
     async hit(key) {
       try {
-        const res = await fetch(`https://kvdb.io/${BUCKET_ID}/${key}?action=incr`, {
-          method: 'POST'
-        });
-        if (!res.ok) throw new Error('Increment failed');
-        const count = await res.text();
-        return parseInt(count, 10);
-      } catch (err) {
-        console.warn(`Hit failed for ${key}:`, err);
-        return null;
+        const res = await fetch(`https://api.counterapi.com/v1/sayanroy0009-meta/${key}/up`);
+        if (res.ok) {
+          const data = await res.json();
+          return data.count;
+        }
+      } catch (e) {
+        console.warn('Remote counter hit failed, falling back:', e);
       }
+
+      // Local fallback
+      const localKey = `sayan_meta_${key}`;
+      const count = parseInt(localStorage.getItem(localKey) || '0', 10) + 1;
+      localStorage.setItem(localKey, count);
+      return count;
     },
 
-    // Gets current counter value without incrementing
     async get(key) {
       try {
-        const res = await fetch(`https://kvdb.io/${BUCKET_ID}/${key}`);
-        if (!res.ok) return 0;
-        const count = await res.text();
-        return parseInt(count, 10) || 0;
-      } catch (err) {
-        console.warn(`Get failed for ${key}:`, err);
-        return 0;
+        const res = await fetch(`https://api.counterapi.com/v1/sayanroy0009-meta/${key}`);
+        if (res.ok) {
+          const data = await res.json();
+          return data.count;
+        }
+      } catch (e) {
+        console.warn('Remote counter get failed, falling back:', e);
       }
+
+      // Local fallback
+      const localKey = `sayan_meta_${key}`;
+      return parseInt(localStorage.getItem(localKey) || '0', 10);
     }
   };
-
+  
   // Elements
   const dropZone = document.getElementById('dropZone');
   const fileInput = document.getElementById('fileInput');
