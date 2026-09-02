@@ -2,17 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const converter = new MetaGlassesConverter();
 
  
-  const TRACKER_NAMESPACE = "rayban-meta-converter-stats";
+  const TRACKER_NAMESPACE = "sayanroy0009-rayban-meta";
 
 
   const StatsTracker = {
     async hit(key) {
       try {
+        // Try incrementing via CounterAPI
         const res = await fetch(`https://api.counterapi.dev/v1/${TRACKER_NAMESPACE}/${key}/up`);
-        if (!res.ok) return null;
+        if (!res.ok) {
+          // If key doesn't exist yet, create/initialize it
+          const setRes = await fetch(`https://api.counterapi.dev/v1/${TRACKER_NAMESPACE}/${key}/set?count=1`);
+          const setData = await setRes.json();
+          return setData.count || 1;
+        }
         const data = await res.json();
         return data.count;
-      } catch {
+      } catch (err) {
+        console.warn(`Counter hit error for ${key}:`, err);
         return null;
       }
     },
@@ -20,10 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     async get(key) {
       try {
         const res = await fetch(`https://api.counterapi.dev/v1/${TRACKER_NAMESPACE}/${key}`);
-        if (!res.ok) return null;
+        if (!res.ok) {
+          // Key doesn't exist yet, initialize with 0
+          await fetch(`https://api.counterapi.dev/v1/${TRACKER_NAMESPACE}/${key}/set?count=0`);
+          return 0;
+        }
         const data = await res.json();
-        return data.count;
-      } catch {
+        return data.count ?? 0;
+      } catch (err) {
+        console.warn(`Counter get error for ${key}:`, err);
         return null;
       }
     }
