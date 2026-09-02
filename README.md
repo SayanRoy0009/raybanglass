@@ -1,29 +1,39 @@
-# Smart Optical Media Normalizer 🕶️
+# RayBan Meta Smart Glasses Photo Converter 🕶️
 
-A lightweight, zero-latency browser utility engineered to conform digital photographs to wearable optical hardware standards. Automatically re-samples portrait aspect ratios to 3024×4032, scrubs hardware serials and positioning telemetry, patches wearable device metadata profiles, and triggers local image export with zero server intervention.
-
----
-
-## ⚡ Core Capabilities
-
-* **Unified Single-Action Pipeline:** Normalizes dimensions, wipes metadata, injects hardware tags, and launches file export in one step.
-* **Aspect & Resolution Calibration:** Automatically rotates EXIF orientations and renders canvas buffers to the native 3024 × 4032 vertical profile.
-* **Privacy & Telemetry Sanitization:** Strips embedded GPS coordinates, camera maker signatures, and lens serial keys before applying the target device profile.
-* **Zero-Cloud Architecture:** 100% in-browser execution utilizing HTML5 Canvas and client-side EXIF manipulation. Raw media never traverses external networks.
-* **Real-Time Analytics:** Integrated lightweight metric tracking to monitor global user sessions and conversion totals without user tracking cookies.
-* **Cross-Platform Responsive UI:** Mobile-optimized dark interface supporting drag-and-drop on desktop and direct camera roll/share sheet access on handhelds.
+A simple, fast web tool that makes any photo look like it was taken with smart glasses. It resizes your image to 3024×4032, removes private info like GPS location, adds smart glasses camera details to the file, and lets you download the result right away. Everything happens directly on your device—no uploads, no servers.
 
 ---
 
-## 🛠️ Architecture & Object Model
+## ⚡ What It Does
 
-The codebase is organized into decoupled layers using standard JavaScript inheritance for maintainability:
+* **1-Click Conversion:** Resizes the image, cleans the data, adds camera tags, and downloads it in one go.
+* **Smart Glasses Size:** Rotates your image upright and fits it to the standard vertical size (3024 × 4032).
+* **Privacy First:** Cleans out your GPS location, phone model, and serial numbers before saving.
+* **100% In Your Browser:** Uses standard browser tools to process images on your device. Your photos are never sent to any server.
+* **Simple Live Counter:** Shows how many people visited and how many photos have been converted without using any tracking cookies.
+* **Works Everywhere:** Clean dark layout that works smoothly on phones, tablets, and desktop computers.
+
+---
+
+## 🛠️ Project Structure
+
+The project is split into clean, easy-to-read files using plain JavaScript:
 
 ```text
 raybanglass/
-├── index.html                  # Interface layout & script orchestration
-├── style.css                   # Minimalist dark dashboard styling
+├── index.html                  # Main page layout
+├── style.css                   # Dark theme design
 └── js/
-    ├── ImageProcessor.js       # Base class: Canvas math, orientation & blob helpers
-    ├── MetaGlassesConverter.js # Derived class: Device profile constants & EXIF builder
-    └── app.js                  # UI controllers, telemetry, and event handlers
+    ├── ImageProcessor.js       # Base helper for image resizing and rotation
+    ├── MetaGlassesConverter.js # Adds the smart glasses camera data
+    └── app.js                  # Buttons, download triggers, and counter logic
+
+
+
+
+### How the Code Works
+
+1. **Pick & Load:** The user selects or snaps a JPEG photo. The browser reads it as a local data URL.
+2. **Rotate & Resize:** `ImageProcessor` checks the photo's original EXIF orientation, rotates it right-side up, and draws it onto a canvas scaled to 3024×4032.
+3. **Clean & Inject:** `MetaGlassesConverter` deletes original phone details and GPS coordinates, then inserts the smart glasses camera make and model tags.
+4. **Save & Count:** The app triggers an automatic `.jpg` download to your device and ticks the public conversion counter up by one.
