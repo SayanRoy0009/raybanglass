@@ -259,38 +259,6 @@ input[type="file"] {
   color: var(--text-main);
 }
 
-/* Metric Cards */
-.metrics-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.metric-card {
-  background: #0d1322;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  padding: 10px 12px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.metric-num {
-  font-size: 16px;
-  font-weight: 700;
-  color: #60a5fa;
-  font-variant-numeric: tabular-nums;
-}
-
-.metric-title {
-  font-size: 11px;
-  color: var(--text-sub);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
 .footer {
   text-align: center;
   font-size: 11px;
