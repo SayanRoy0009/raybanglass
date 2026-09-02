@@ -5,32 +5,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const TRACKER_NAMESPACE = "sayanroy0009-rayban-meta";
 
 
+  // Public, zero-token bucket on KVdb.io
+  const BUCKET_ID = "bk_sayan_rayban"; 
+
   const StatsTracker = {
+    // Increments counter globally (+1)
     async hit(key) {
       try {
-        const res = await fetch(`https://hit.yhype.me/hit/sayanroy0009_meta_${key}`);
-        if (!res.ok) throw new Error('API failed');
-        const data = await res.json();
-        return data.value ?? data.count ?? null;
+        const res = await fetch(`https://kvdb.io/${BUCKET_ID}/${key}?action=incr`, {
+          method: 'POST'
+        });
+        if (!res.ok) throw new Error('Increment failed');
+        const count = await res.text();
+        return parseInt(count, 10);
       } catch (err) {
-    
-        const localKey = `meta_counter_${key}`;
-        const current = parseInt(localStorage.getItem(localKey) || '0', 10) + 1;
-        localStorage.setItem(localKey, current);
-        return current;
+        console.warn(`Hit failed for ${key}:`, err);
+        return null;
       }
     },
 
+    // Gets current counter value without incrementing
     async get(key) {
       try {
-        const res = await fetch(`https://hit.yhype.me/get/sayanroy0009_meta_${key}`);
-        if (!res.ok) throw new Error('API failed');
-        const data = await res.json();
-        return data.value ?? data.count ?? null;
+        const res = await fetch(`https://kvdb.io/${BUCKET_ID}/${key}`);
+        if (!res.ok) return 0;
+        const count = await res.text();
+        return parseInt(count, 10) || 0;
       } catch (err) {
-        
-        const localKey = `meta_counter_${key}`;
-        return parseInt(localStorage.getItem(localKey) || '0', 10);
+        console.warn(`Get failed for ${key}:`, err);
+        return 0;
       }
     }
   };
