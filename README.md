@@ -1,6 +1,6 @@
 # RayBan Meta Smart Glasses Photo Converter 🕶️
 
-A simple, fast web tool that makes any photo look like it was taken with smart glasses. It resizes your image to 3024×4032, removes private info like GPS location, adds smart glasses camera details to the file, and lets you download the result right away. Everything happens directly on your device—no uploads, no servers.
+A simple, fast web tool that makes any photo look like it was taken with smart glasses. It resizes your image to 3024×4032, removes private info like GPS location, adds smart glasses camera details to the file, and lets you download the result right away. Everything happens directly on your device no uploads, no servers.
 
 ---
 
@@ -8,7 +8,7 @@ A simple, fast web tool that makes any photo look like it was taken with smart g
 
 ### Live Website
 You can use the tool directly in your browser here:
-👉 **`https://<your-username>.github.io/<your-repo-name>/`**
+👉 **`https://sayanroy0009.github.io/raybanglass/`**
 
 ---
 
@@ -26,7 +26,6 @@ You can use the tool directly in your browser here:
 * **Smart Glasses Size:** Rotates your image upright and fits it to the standard vertical size (3024 × 4032).
 * **Privacy First:** Cleans out your GPS location, phone model, and serial numbers before saving.
 * **100% In Your Browser:** Uses standard browser tools to process images on your device. Your photos are never sent to any server.
-* **Simple Live Counter:** Shows how many people visited and how many photos have been converted without using any tracking cookies.
 * **Works Everywhere:** Clean dark layout that works smoothly on phones, tablets, and desktop computers.
 
 ---
@@ -52,8 +51,7 @@ raybanglass/
 1. **Pick & Load:** The user selects or snaps a JPEG photo. The browser reads it as a local data URL.
 2. **Rotate & Resize:** `ImageProcessor` checks the photo's original EXIF orientation, rotates it right-side up, and draws it onto a canvas scaled to 3024×4032.
 3. **Clean & Inject:** `MetaGlassesConverter` deletes original phone details and GPS coordinates, then inserts the smart glasses camera make and model tags.
-4. **Save & Count:** The app triggers an automatic `.jpg` download to your device and ticks the public conversion counter up by one.
-
+4. **Save:** The app triggers an automatic `.jpg` download to your device. 
 
 
 ## 📋 File Details
