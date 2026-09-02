@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- piexifjs via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/piexifjs/1.0.6/piexif.js"></script>
 </head>
 <body>
@@ -62,17 +63,6 @@
           <span class="spec-val">Ray-Ban Meta 2</span>
         </div>
       </div>
-
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <span class="metric-num" id="visitCount">—</span>
-          <span class="metric-title">Global Visits</span>
-        </div>
-        <div class="metric-card">
-          <span class="metric-num" id="conversionCount">—</span>
-          <span class="metric-title">Photos Processed</span>
-        </div>
-      </div>
     </main>
 
     <footer class="footer">
@@ -80,6 +70,7 @@
     </footer>
   </div>
 
+  <!-- Scripts loaded in modular dependency order -->
   <script src="js/ImageProcessor.js"></script>
   <script src="js/MetaGlassesConverter.js"></script>
   <script src="js/app.js"></script>
