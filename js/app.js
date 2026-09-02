@@ -6,30 +6,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   const StatsTracker = {
-
-    async hit(counterName) {
+    async hit(key) {
       try {
-        const res = await fetch(`https://api.counterapi.dev/v2/${TRACKER_WORKSPACE}/${counterName}/up`, {
-          method: 'POST'
-        });
-        if (!res.ok) return null;
+
+        const res = await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}/up`);
+        if (!res.ok) {
+          
+          const setRes = await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}/set?count=1`);
+          const setData = await setRes.json();
+          return setData.count || 1;
+        }
         const data = await res.json();
-        return data.data?.count ?? data.count ?? null;
+        return data.count;
       } catch (err) {
-        console.warn(`Counter v2 hit failed for ${counterName}:`, err);
+        console.warn(`Counter hit error for ${key}:`, err);
         return null;
       }
     },
 
-
-    async get(counterName) {
+    async get(key) {
       try {
-        const res = await fetch(`https://api.counterapi.dev/v2/${TRACKER_WORKSPACE}/${counterName}`);
-        if (!res.ok) return null;
+        const res = await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}`);
+        if (!res.ok) {
+          
+          await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}/set?count=0`);
+          return 0;
+        }
         const data = await res.json();
-        return data.data?.count ?? data.count ?? null;
+        return data.count ?? 0;
       } catch (err) {
-        console.warn(`Counter v2 get failed for ${counterName}:`, err);
+        console.warn(`Counter get error for ${key}:`, err);
         return null;
       }
     }
