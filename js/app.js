@@ -6,29 +6,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   const StatsTracker = {
- 
     async hit(key) {
       try {
-        const res = await fetch(`https://api.codetabs.com/v1/counter?name=sayanroy0009_meta_${key}`);
-        if (!res.ok) return null;
-        const count = await res.text();
-        return parseInt(count, 10);
+        const res = await fetch(`https://hit.yhype.me/hit/sayanroy0009_meta_${key}`);
+        if (!res.ok) throw new Error('API failed');
+        const data = await res.json();
+        return data.value ?? data.count ?? null;
       } catch (err) {
-        console.warn(`Counter hit error for ${key}:`, err);
-        return null;
+    
+        const localKey = `meta_counter_${key}`;
+        const current = parseInt(localStorage.getItem(localKey) || '0', 10) + 1;
+        localStorage.setItem(localKey, current);
+        return current;
       }
     },
 
-
     async get(key) {
       try {
-        const res = await fetch(`https://api.codetabs.com/v1/counter?name=sayanroy0009_meta_${key}&count=false`);
-        if (!res.ok) return null;
-        const count = await res.text();
-        return parseInt(count, 10);
+        const res = await fetch(`https://hit.yhype.me/get/sayanroy0009_meta_${key}`);
+        if (!res.ok) throw new Error('API failed');
+        const data = await res.json();
+        return data.value ?? data.count ?? null;
       } catch (err) {
-        console.warn(`Counter get error for ${key}:`, err);
-        return null;
+        
+        const localKey = `meta_counter_${key}`;
+        return parseInt(localStorage.getItem(localKey) || '0', 10);
       }
     }
   };
