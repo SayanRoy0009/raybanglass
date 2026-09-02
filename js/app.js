@@ -6,34 +6,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   const StatsTracker = {
+ 
     async hit(key) {
       try {
-
-        const res = await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}/up`);
-        if (!res.ok) {
-          
-          const setRes = await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}/set?count=1`);
-          const setData = await setRes.json();
-          return setData.count || 1;
-        }
-        const data = await res.json();
-        return data.count;
+        const res = await fetch(`https://api.codetabs.com/v1/counter?name=sayanroy0009_meta_${key}`);
+        if (!res.ok) return null;
+        const count = await res.text();
+        return parseInt(count, 10);
       } catch (err) {
         console.warn(`Counter hit error for ${key}:`, err);
         return null;
       }
     },
 
+
     async get(key) {
       try {
-        const res = await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}`);
-        if (!res.ok) {
-          
-          await fetch(`https://api.counterapi.dev/v2/${TRACKER_NAMESPACE}/${key}/set?count=0`);
-          return 0;
-        }
-        const data = await res.json();
-        return data.count ?? 0;
+        const res = await fetch(`https://api.codetabs.com/v1/counter?name=sayanroy0009_meta_${key}&count=false`);
+        if (!res.ok) return null;
+        const count = await res.text();
+        return parseInt(count, 10);
       } catch (err) {
         console.warn(`Counter get error for ${key}:`, err);
         return null;
